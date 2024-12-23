@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+    title: "Planowanie RTK"
+    description: "Application for path planning of GNSS RTK rover."
+    version: "1.0.0"
+
+servers:
+    - url: "/api"
+ 
+components:
+    schemas:
+        Rover:
+            type: "object"
+            required:
+                - name
+            properties:
+                name:
+                    type: "string"
+    parameters:
+        rover_id:
+            name: "rover_id"
+            description: "ID rover"
+            in: path
+            required: True
+            schema:
+                type: "string"
+
+paths:
+    /rover:
+        get:
+            operationId: "rover.read_all"
+            tags:
+                - "Rover"
+            summary: "Get list of all rovers."
+            responses:
+                "200":
+                    description: "Successfully get list or rovers."
+        post:
+            operationId: "rover.create"
+            tags:
+                - "Rover"
+            summary: "Add new rover."
+            requestBody:
+                description: "Rover"
+                required: True
+                content:
+                    application/json:
+                        schema:
+                            x-body-name: "rover"
+                            $ref: "#/components/schemas/Rover"
+            responses:
+                "201":
+                    description: "Successfully created rover"
+
+    /rover/{rover_id}:
+        get:
+            operationId: "rover.read_one"
+            tags:
+                - "Rover"
+            summary: "Get rover of specific ID."
+            parameters:
+                - $ref: "#/components/parameters/rover_id"
+            responses:
+                "200":
+                    description: "Successfully get rover of given ID."
+        put:
+            tags:
+                - "Rover"
+            operationId: "rover.update"
+            summary: "Update existing rover."
+            parameters:
+                - $ref: "#/components/parameters/rover_id"
+            responses:
+                "200":
+                    description: "Successfully updated rover."
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            x-body-name: "rover"
+                            $ref: "#/components/schemas/Rover"
+        delete:
+            tags:
+                - "Rover"
+            operationId: "rover.delete"
+            summary: "Delete rover."
+            parameters:
+                - $ref: "#/components/parameters/rover_id"
+            responses:
+                "204":
+                    description: "Successfully deleted rover." 
